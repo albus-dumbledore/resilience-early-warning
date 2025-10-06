@@ -1,0 +1,51 @@
+project_name: "Resilience Early Warning"
+random_seed: 42
+paths:
+  data_dir: "data"
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  model_dir: "models"
+  predictions_dir: "predictions"
+
+data:
+  baseline_file: "data/raw/baseline.csv"
+  monthly_file:  "data/raw/monthly_shocks.csv"
+
+columns:
+  id_col: "household_id"
+  date_col: "report_date"
+  label_col: "food_insecure_next_month"
+
+  baseline_features:
+    - "land_area_hectares"
+    - "livestock_units"
+    - "floodplain_exposure"
+    - "secondary_house"
+    - "head_age"
+    - "head_gender_female"
+    - "head_education_years"
+    - "head_disability"
+
+  monthly_shock_events:
+    - "drought"
+    - "flood"
+    - "illness"
+    - "crop_disease"
+
+features:
+  shock_rolling_months: 3
+  include_shock_counts: true
+
+model:
+  type: "logistic_regression"
+  params:
+    logistic_regression:
+      C: 1.0
+      max_iter: 1000
+    random_forest:
+      n_estimators: 300
+      max_depth: null
+
+training:
+  test_size: 0.2
+  stratify: true
